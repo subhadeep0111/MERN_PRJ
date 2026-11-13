@@ -250,7 +250,7 @@ export default function RecordDetail() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {record.attachments.map((att, idx) => {
-                const downloadUrl = `http://localhost:5000/uploads/${att.filename}`;
+                const downloadUrl = `/uploads/${att.filename}`;
                 return (
                   <div key={idx} className="flex items-center justify-between p-3 border rounded-xl bg-gray-50/50 hover:bg-gray-50">
                     <div className="flex items-center gap-3 overflow-hidden">
