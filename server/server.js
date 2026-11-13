@@ -40,7 +40,7 @@ app.use(helmet());
 
 // CORS
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: true, // Allow any origin in dev (localhost, local network IP, or tunnel)
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -69,7 +69,19 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Patient RMS API is running.', timestamp: new Date().toISOString() });
 });
 
-// 404 handler
+// Serve client production build if available
+const clientDist = path.resolve(__dirname, '../client/dist');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res, next) => {
+    if (req.url.startsWith('/api') || req.url.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
+
+// 404 handler for API routes
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.method} ${req.url} not found.` });
 });
