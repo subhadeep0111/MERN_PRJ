@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
+    allowedHosts: true, // Allow localtunnel, ngrok, and any external host
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
